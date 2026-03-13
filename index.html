@@ -807,6 +807,20 @@ function showPlan(redirectUrl){
     pv.style.opacity='1';
   });
   window.scrollTo(0,0);
+
+  // Fire-and-forget — add to Flodesk sequence
+  const dayTitles=[];
+  for(let i=1;i<=days;i++){const t=p.get('d'+i);if(t)dayTitles.push(t);}
+  fetch('/api/email',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      email:document.getElementById('inp-email').value.trim(),
+      name,days,dates,style,
+      regions:regionsStr.split(',').map(r=>r.trim()).filter(Boolean),
+      vibe,dayTitles
+    })
+  }).catch(()=>{}); // silent fail — never blocks the UX
 }
 
 // ─── PLAN INTERACTIONS ────────────────────────────
