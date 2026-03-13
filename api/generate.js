@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { name, days, dates, group, regions, style, vibe, pairing } = req.body;
+    const { name, days, dates, group, regions, style, vibe } = req.body;
 
     // Fetch Google Sheets CSV
     let properties = [];
@@ -39,9 +39,9 @@ export default async function handler(req, res) {
     const tier = tierMap[style] || 'Comfort & Culture';
 
     const priceMap = {
-      'Grounded & Genuine': '$50-$150 / day',
-      'Comfort & Culture': '$150-$350 / day',
-      'Soft Life & Premium': '$400-$800 / day',
+      'Grounded & Genuine': 'from $250 / day',
+      'Comfort & Culture': 'from $350 / day',
+      'Soft Life & Premium': 'from $450 / day',
     };
 
     const selectedRegions = Array.isArray(regions) ? regions : [];
@@ -70,19 +70,30 @@ Details:
 Curated properties available:
 ${propList}
 
-Generate evocative, exciting day titles (3-6 words each). Make them feel like a travel magazine - aspirational and specific to Ghana.
-
-Examples of great day titles:
-- "Arrival & The Golden Mile"
-- "Castle Echoes & Canopy Walk"
-- "Volta River Drift & Dusk"
-- "Kumasi Market & Kente Masters"
+Rules:
+- Each day MUST have exactly 4 activities (no fewer)
+- Activity icons: single emoji, specific to the activity type
+- Activity names: 3-5 words, evocative and specific to Ghana
+- Activity descriptions: max 7 words, sensory and exciting
+- Day titles: 3-6 words, travel magazine style, specific to Ghana
+- Location: real Ghana city or area per day
 
 Return ONLY valid JSON:
 {
-  "dayTitles": ["title1", "title2", ...],
+  "tripTheme": "short evocative phrase (max 5 words)",
   "regions": "City1, City2, City3",
-  "tripTheme": "short evocative phrase (max 5 words)"
+  "days": [
+    {
+      "title": "Day Title Here",
+      "location": "Accra",
+      "activities": [
+        {"icon": "🤝", "name": "Activity Name", "desc": "Short vivid description"},
+        {"icon": "🍲", "name": "Activity Name", "desc": "Short vivid description"},
+        {"icon": "🎵", "name": "Activity Name", "desc": "Short vivid description"},
+        {"icon": "🌅", "name": "Activity Name", "desc": "Short vivid description"}
+      ]
+    }
+  ]
 }`;
 
     const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -96,7 +107,7 @@ Return ONLY valid JSON:
         messages: [{ role: 'user', content: prompt }],
         response_format: { type: 'json_object' },
         temperature: 0.85,
-        max_tokens: 600
+        max_tokens: 3000
       })
     });
 
@@ -108,26 +119,35 @@ Return ONLY valid JSON:
     const openaiData = await openaiRes.json();
     const result = JSON.parse(openaiData.choices[0].message.content);
 
-    const dayTitles = (result.dayTitles || []).slice(0, numDays);
-    while (dayTitles.length < numDays) dayTitles.push(`Day ${dayTitles.length + 1}`);
+    const resultDays = (result.days || []).slice(0, numDays);
+    while (resultDays.length < numDays) {
+      resultDays.push({ title: `Day ${resultDays.length + 1}`, location: regionList, activities: [] });
+    }
 
     const params = new URLSearchParams({
       name: name || 'Traveler',
       days: String(numDays),
       dates: dates || '',
       style: tier,
-      price: priceMap[tier] || '$150-$350 / day',
+      price: priceMap[tier] || 'from $350 / day',
       regions: (result.regions || regionList).replace(/,\s*/g, ','),
       group: group || 'solo',
       vibe: Array.isArray(vibe) ? (vibe[0] || 'culture') : (vibe || 'culture'),
       plan_unlocked: '1'
     });
 
-    dayTitles.forEach((title, i) => params.set(`d${i + 1}`, title));
+    resultDays.forEach((day, i) => {
+      params.set(`d${i + 1}`, day.title || `Day ${i + 1}`);
+      if (day.activities && day.activities.length > 0) {
+        const actStr = day.activities.map(a => `${a.icon || '📍'}~${a.name || 'Activity'}~${a.desc || ''}`).join('|');
+        params.set(`d${i + 1}a`, actStr);
+      }
+    });
 
     return res.status(200).json({
-      redirectUrl: `https://akwaaba-trip-planner.vercel.app/?${params.toString()}`,
-      tripTheme: result.tripTheme || ''
+      redirectUrl: `/plan/?${params.toString()}`,
+      tripTheme: result.tripTheme || '',
+      days: numDays
     });
 
   } catch (error) {
