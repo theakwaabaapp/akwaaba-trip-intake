@@ -1,0 +1,1 @@
+# Akwaaba Trip Intake\n\nAI-powered Ghana trip planner intake form. Collects user preferences, pulls curated properties from Google Sheets, generates a personalised itinerary via OpenAI, and redirects to the Akwaaba trip output page.\n\n## Setup\n\n1. Deploy to Vercel\n2. Add environment variable: `OPENAI_API_KEY`\n3. Done\n
