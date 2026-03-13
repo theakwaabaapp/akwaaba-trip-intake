@@ -8,12 +8,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#C8963E;--gold-lt:#E8B86D;--dark:#080F0A;--green:#1E4D3A;--gl:#2A6B50;--border:rgba(255,255,255,0.1);--card:rgba(255,255,255,0.055);--muted:#7A8A80;--w:#fff}
+:root{--gold:#C8963E;--gold-lt:#E8B86D;--dark:#080F0A;--green:#1E4D3A;--gl:#2A6B50;--deep:#1A1208;--orange:#E8642A;--border:rgba(255,255,255,0.1);--card:rgba(255,255,255,0.055);--muted:#7A8A80;--w:#fff;--card-radius:20px}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',sans-serif;background:var(--dark);color:var(--w);max-width:480px;margin:0 auto;min-height:100svh;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--dark);color:var(--w);max-width:480px;margin:0 auto;min-height:100svh;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(42,107,80,.22) 0%,transparent 70%),radial-gradient(ellipse 50% 35% at 85% 75%,rgba(200,150,62,.1) 0%,transparent 65%),radial-gradient(ellipse 40% 30% at 50% 50%,rgba(30,77,58,.12) 0%,transparent 70%)}
 .ghana-strip{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:3px;z-index:200;background:linear-gradient(90deg,#CE1126 33.3%,#FCD116 33.3% 66.6%,#006B3F 66.6%)}
+
+/* ─── INTAKE ─── */
 .pbar{position:fixed;top:3px;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;padding:max(env(safe-area-inset-top),16px) 24px 14px;background:linear-gradient(to bottom,rgba(8,15,10,.97) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .pbar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
 .logo{display:flex;align-items:center;gap:9px}
@@ -88,7 +90,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .lstep.active{color:var(--w);border-color:rgba(200,150,62,.3);background:rgba(200,150,62,.06)}
 .lstep.done{color:#2A6B50;border-color:rgba(42,107,80,.3)}
 .lstep-icon{font-size:16px;flex-shrink:0}
-/* Paywall modal */
 .pw-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(8,15,10,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:flex-end;justify-content:center}
 .pw-overlay.on{display:flex;animation:fadeIn .25s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -104,11 +105,165 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 .pw-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(200,150,62,.45)}
 .pw-skip{width:100%;padding:14px;border-radius:14px;border:1.5px solid var(--border);background:transparent;color:rgba(255,255,255,.5);font-family:'Inter',sans-serif;font-size:14px;cursor:pointer;transition:all .2s}
 .pw-skip:hover{color:var(--w);border-color:rgba(255,255,255,.2)}
+
+/* ─── PLAN VIEW ─── */
+#plan-view{background:#0F0F0F;min-height:100svh;display:none}
+.pv-hero{position:relative;height:100svh;min-height:640px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+.pv-hero-img{position:absolute;inset:0;background:url('plan/hero.jpg') center top/cover no-repeat;background-color:#2D3A1A}
+.pv-hero-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1) 0%,rgba(0,0,0,.2) 40%,rgba(0,0,0,.85) 80%,rgba(0,0,0,.95) 100%)}
+.pv-hero-top{position:absolute;top:0;left:0;right:0;padding:52px 24px 20px;display:flex;justify-content:space-between;align-items:center;z-index:2}
+.pv-logo img{height:34px;width:34px;object-fit:contain;background:#fff;border-radius:8px;padding:5px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.pv-hero-badge{background:rgba(200,150,62,.25);border:1px solid rgba(200,150,62,.5);backdrop-filter:blur(8px);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--gold-lt);letter-spacing:.05em;text-transform:uppercase}
+.pv-hero-content{position:relative;z-index:2;padding:0 24px 36px;animation:pvFadeUp .7s ease .2s both}
+.pv-greeting{font-size:14px;font-weight:500;color:var(--gold-lt);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;opacity:.9}
+.pv-hero-title{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:16px}
+.pv-hero-title span{color:var(--gold-lt);display:block}
+.pv-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.pv-chip{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:7px 13px;font-size:13px;font-weight:500;color:rgba(255,255,255,.9)}
+.pv-chip .icon{font-size:14px}
+.pv-style-card{background:rgba(200,150,62,.15);border:1px solid rgba(200,150,62,.35);backdrop-filter:blur(12px);border-radius:16px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between}
+.pv-style-card .sc-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--gold-lt);margin-bottom:3px;opacity:.8}
+.pv-style-card .sc-name{font-size:17px;font-weight:700;color:var(--w)}
+.pv-style-card .sc-price{font-size:13px;color:var(--gold-lt);font-weight:500;margin-top:2px}
+.pv-style-card .sc-features{font-size:11px;color:rgba(255,255,255,.55);font-weight:400;margin-top:5px;line-height:1.4}
+.pv-style-card .sc-stars{font-size:22px;letter-spacing:2px;color:var(--gold-lt)}
+.pv-scroll-hint{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.4);letter-spacing:.04em;margin-top:20px}
+.pv-scroll-hint::before{content:'';display:block;width:24px;height:1px;background:rgba(255,255,255,.3)}
+@keyframes pvFadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.route-bar{background:var(--deep);padding:20px 24px;display:flex;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid rgba(255,255,255,.06)}
+.route-bar::-webkit-scrollbar{display:none}
+.route-stop{display:flex;align-items:center;flex-shrink:0}
+.route-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.route-dot.start{background:var(--gold-lt);width:10px;height:10px}
+.route-name{font-size:13px;font-weight:600;color:rgba(255,255,255,.8);padding:0 8px;white-space:nowrap}
+.route-arrow{font-size:11px;color:rgba(255,255,255,.25);padding:0 4px}
+.section-label{padding:28px 24px 16px;background:#0F0F0F}
+.section-label .eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.section-label h2{font-size:24px;font-weight:800;letter-spacing:-.01em;color:var(--w)}
+.days-stack{display:flex;flex-direction:column;gap:3px;background:#0F0F0F;padding:0 0 4px}
+.day-card{position:relative;height:420px;overflow:hidden;cursor:pointer;transition:height .4s ease}
+.day-card-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .6s ease}
+.day-card:hover .day-card-img,.day-card:active .day-card-img{transform:scale(1.03)}
+.day-img-1 .day-card-img{background:url('plan/day1.jpg') center/cover no-repeat;background-color:#1A3A1A}
+.day-img-2 .day-card-img{background:url('plan/day2.jpg') center/cover no-repeat;background-color:#0D2B1A}
+.day-img-3 .day-card-img{background:url('plan/day3.jpg') center/cover no-repeat;background-color:#2B1A0D}
+.day-img-4 .day-card-img{background:url('plan/day4.jpg') center/cover no-repeat;background-color:#1A2B3A}
+.day-card-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,.05) 25%,rgba(0,0,0,.65) 65%,rgba(0,0,0,.90) 100%)}
+.day-card-content{position:absolute;bottom:0;left:0;right:0;padding:24px 22px 22px;z-index:2}
+.day-number{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:5px}
+.day-title{font-size:26px;font-weight:800;line-height:1.1;letter-spacing:-.01em;margin-bottom:16px;color:var(--w)}
+.activities{display:flex;flex-direction:column;gap:8px}
+.activity-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 14px}
+.activity-icon{font-size:18px;flex-shrink:0;width:28px;text-align:center}
+.activity-info{flex:1}
+.activity-name{font-size:14px;font-weight:600;color:var(--w);line-height:1.2}
+.activity-desc{font-size:11px;color:rgba(255,255,255,.55);margin-top:1px;line-height:1.3}
+.section-divider{height:6px;background:linear-gradient(90deg,var(--gold) 0%,var(--orange) 50%,var(--gold) 100%)}
+.perks-strip{background:var(--green);padding:20px 24px;display:flex;gap:16px;align-items:stretch}
+.perk{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.perk-icon{font-size:26px}
+.perk-title{font-size:13px;font-weight:700;color:var(--w);line-height:1.2}
+.perk-sub{font-size:11px;color:rgba(255,255,255,.6);line-height:1.3}
+.perk-divider{width:1px;background:rgba(255,255,255,.15);align-self:stretch}
+.info-section{background:#111;padding:28px 24px}
+.info-section .eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px}
+.info-card .i-icon{font-size:20px;margin-bottom:6px;display:block}
+.info-card .i-label{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:2px}
+.info-card .i-value{font-size:14px;font-weight:600;color:var(--w);line-height:1.3}
+.packing-section{background:#111;padding:0 24px 28px}
+.packing-section .eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.pack-row{display:flex;flex-wrap:wrap;gap:8px}
+.pack-chip{display:flex;align-items:center;gap:6px;background:rgba(200,150,62,.1);border:1px solid rgba(200,150,62,.25);border-radius:20px;padding:8px 13px;font-size:13px;font-weight:500;color:rgba(255,255,255,.8)}
+.concierge-section{background:var(--deep);margin:16px;border-radius:24px;overflow:hidden;border:1px solid rgba(200,150,62,.2);position:relative}
+.concierge-glow{position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(200,150,62,.2) 0%,transparent 70%);pointer-events:none}
+.concierge-inner{padding:28px 24px 24px;position:relative;z-index:1}
+.concierge-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(200,150,62,.15);border:1px solid rgba(200,150,62,.3);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:16px}
+.concierge-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;line-height:1.1;letter-spacing:-.02em;color:var(--w);margin-bottom:8px}
+.concierge-title span{color:var(--gold-lt)}
+.concierge-sub{font-size:14px;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:22px}
+.concierge-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:26px}
+.concierge-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:rgba(255,255,255,.8);line-height:1.4}
+.concierge-list li::before{content:'';display:block;width:18px;height:18px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:1px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M4 9l3.5 3.5L14 6' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat}
+.concierge-price-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:16px;background:rgba(200,150,62,.08);border-radius:14px;border:1px solid rgba(200,150,62,.15)}
+.price-label{font-size:13px;color:rgba(255,255,255,.5)}
+.price-amount{font-size:32px;font-weight:800;color:var(--gold-lt);letter-spacing:-.02em}
+.price-per{font-size:12px;color:rgba(255,255,255,.4);margin-top:2px}
+.btn-primary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(--gold) 0%,var(--orange) 100%);color:var(--w);font-size:16px;font-weight:700;border:none;border-radius:14px;padding:17px 24px;cursor:pointer;text-decoration:none;letter-spacing:.01em;transition:opacity .2s ease,transform .15s ease;-webkit-tap-highlight-color:transparent}
+.btn-primary:active{opacity:.9;transform:scale(.98)}
+.btn-secondary{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:transparent;color:rgba(255,255,255,.6);font-size:14px;font-weight:600;border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:14px 24px;cursor:pointer;text-decoration:none;margin-top:10px;transition:border-color .2s ease;-webkit-tap-highlight-color:transparent}
+.share-section{padding:28px 24px;background:#0F0F0F}
+.share-section .eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.share-section h3{font-size:22px;font-weight:800;margin-bottom:20px;color:var(--w)}
+.social-card{border-radius:18px;overflow:hidden;margin-bottom:20px;border:1px solid rgba(255,255,255,.1);background:#1A1208;position:relative;aspect-ratio:4/5;max-height:320px}
+.social-card-bg{position:absolute;inset:0;background:url('plan/social.jpg') center top/cover no-repeat;background-color:#2D4A1E}
+.social-card-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.2) 0%,rgba(0,0,0,.85) 100%)}
+.social-card-content{position:absolute;inset:0;padding:20px;display:flex;flex-direction:column;justify-content:space-between;z-index:2}
+.social-card-logo{font-size:14px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:.04em}
+.social-flag{font-size:28px;margin-bottom:6px;display:block}
+.social-card-title{font-size:26px;font-weight:800;line-height:1.1;letter-spacing:-.01em;margin-bottom:10px}
+.social-regions{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.social-region-chip{background:rgba(200,150,62,.3);border:1px solid rgba(200,150,62,.5);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--gold-lt)}
+.social-tagline{font-size:14px;color:rgba(255,255,255,.6);line-height:1.4}
+.social-card-footer{display:flex;align-items:center;justify-content:space-between}
+.social-generated{font-size:11px;color:rgba(255,255,255,.35);font-weight:500}
+.social-days-badge{background:var(--gold);color:var(--dark);font-size:12px;font-weight:800;border-radius:20px;padding:5px 12px}
+.share-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.share-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 12px;font-size:13px;font-weight:600;color:rgba(255,255,255,.8);cursor:pointer;text-decoration:none;transition:background .15s ease;-webkit-tap-highlight-color:transparent}
+.share-btn .s-icon{font-size:17px}
+.share-btn:active{background:rgba(255,255,255,.1)}
+.sticky-footer{position:sticky;bottom:0;background:linear-gradient(to top,rgba(10,8,3,1) 60%,rgba(10,8,3,0) 100%);padding:20px 24px 32px;z-index:100}
+.sticky-footer .btn-primary{box-shadow:0 8px 32px rgba(200,150,62,.35)}
+.app-section{background:#0A0A0A;padding:28px 24px 32px;border-top:1px solid rgba(255,255,255,.06)}
+.app-section .eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.app-section h3{font-size:20px;font-weight:800;color:var(--w);margin-bottom:6px;line-height:1.2}
+.app-section p{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:20px;line-height:1.5}
+.app-badges{display:flex;gap:10px}
+.app-badge{flex:1;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:12px 14px;text-decoration:none;transition:background .15s ease,border-color .15s ease}
+.app-badge:active{background:rgba(255,255,255,.1);border-color:rgba(200,150,62,.4)}
+.app-badge-icon{font-size:24px;flex-shrink:0;line-height:1}
+.app-badge-text{display:flex;flex-direction:column}
+.app-badge-sub{font-size:10px;color:rgba(255,255,255,.45);font-weight:500;letter-spacing:.02em;line-height:1;margin-bottom:2px}
+.app-badge-store{font-size:14px;font-weight:700;color:var(--w);line-height:1.1}
+.site-footer{background:#000;padding:24px 24px 36px;text-align:center;border-top:1px solid rgba(255,255,255,.06)}
+.site-footer img{height:28px;width:28px;object-fit:contain;background:#fff;border-radius:7px;padding:4px;margin-bottom:12px;display:block;margin-left:auto;margin-right:auto}
+.site-footer .footer-name{font-size:14px;font-weight:700;color:rgba(255,255,255,.8);margin-bottom:6px;letter-spacing:.02em}
+.site-footer .footer-legal{font-size:11px;color:rgba(255,255,255,.3);line-height:1.6;max-width:280px;margin:0 auto}
+.bottom-space{height:20px;background:#0F0F0F}
+.sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:200;align-items:flex-end}
+.sheet-overlay.open{display:flex}
+.sheet{background:#111;border-radius:24px 24px 0 0;padding:0 0 40px;width:100%;animation:sheetUp .35s cubic-bezier(.32,.72,0,1)}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin:12px auto 20px}
+.sheet-title{font-size:16px;font-weight:700;color:var(--w);text-align:center;margin-bottom:20px;padding:0 24px}
+.save-card{margin:0 24px 20px;border-radius:20px;overflow:hidden;aspect-ratio:9/16;max-height:440px;position:relative;background:var(--dark)}
+.save-card-bg{position:absolute;inset:0;background:url('plan/hero.jpg') center/cover no-repeat;background-color:#2D3A1A}
+.save-card-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.15) 0%,rgba(0,0,0,.25) 30%,rgba(0,0,0,.80) 65%,rgba(0,0,0,.97) 100%)}
+.save-card-content{position:absolute;inset:0;padding:20px;display:flex;flex-direction:column;justify-content:space-between;z-index:2}
+.save-card-top{display:flex;align-items:center;gap:8px}
+.save-card-top img{height:26px;width:26px;background:#fff;border-radius:6px;padding:3px;object-fit:contain}
+.save-card-top span{font-size:13px;font-weight:700;color:rgba(255,255,255,.8);letter-spacing:.04em}
+.save-card-body{display:flex;flex-direction:column}
+.save-card-flag{font-size:32px;display:block;margin-bottom:6px}
+.save-card-name{font-size:32px;font-weight:800;line-height:1.05;letter-spacing:-.02em;color:var(--w);margin-bottom:12px}
+.save-card-name span{color:var(--gold-lt);display:block}
+.save-card-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.save-card-chip{background:rgba(200,150,62,.25);border:1px solid rgba(200,150,62,.4);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600;color:var(--gold-lt)}
+.save-card-days{display:flex;flex-direction:column;gap:5px;margin-bottom:16px}
+.save-card-day{font-size:12px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:6px}
+.save-card-day::before{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.save-card-footer{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:.06em;text-transform:uppercase}
+.sheet-actions{padding:0 24px;display:flex;flex-direction:column;gap:10px}
+.sheet-close{background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:14px;font-size:14px;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer}
 </style>
 </head>
 <body>
 
 <div class="ghana-strip"></div>
+
+<!-- ─── INTAKE VIEW ─── -->
+<div id="intake-view">
 
 <div class="pbar" id="pbar">
   <div class="pbar-top">
@@ -141,10 +296,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <div class="qlabel" style="margin-top:0">Your email address</div>
   <input class="txt-in" id="inp-email" type="email" placeholder="you@example.com" autocomplete="email" oninput="v1()">
   <div class="bnav">
-    <button class="bnxt" id="b1" onclick="go(2)" disabled>
-      Continue
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    </button>
+    <button class="bnxt" id="b1" onclick="go(2)" disabled>Continue <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -172,38 +324,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <div class="divider"></div>
   <div class="qlabel">How many days?</div>
   <div class="opts">
-    <div class="opt" data-q="days" data-val="4" onclick="pick(this)">
-      <span class="oicon">⚡</span>
-      <div style="flex:1"><div class="olabel">3–4 days</div><div class="osub">Quick getaway</div></div>
-      <div class="radio"></div>
-    </div>
-    <div class="opt" data-q="days" data-val="7" onclick="pick(this)">
-      <span class="oicon">🌍</span>
-      <div style="flex:1"><div class="olabel">5–7 days</div><div class="osub">Classic Ghana trip</div></div>
-      <div class="radio"></div>
-    </div>
-    <div class="opt" data-q="days" data-val="10" onclick="pick(this)">
-      <span class="oicon">🗺️</span>
-      <div style="flex:1"><div class="olabel">8–10 days</div><div class="osub">Deep dive</div></div>
-      <div class="radio"></div>
-    </div>
-    <div class="opt" data-q="days" data-val="14" onclick="pick(this)">
-      <span class="oicon">🏡</span>
-      <div style="flex:1"><div class="olabel">11–14 days</div><div class="osub">Full immersion</div></div>
-      <div class="radio"></div>
-    </div>
-    <div class="opt" data-q="days" data-val="14" onclick="pick(this)">
-      <span class="oicon">🇬🇭</span>
-      <div style="flex:1"><div class="olabel">2+ weeks</div><div class="osub">Living like a local</div></div>
-      <div class="radio"></div>
-    </div>
+    <div class="opt" data-q="days" data-val="4" onclick="pick(this)"><span class="oicon">⚡</span><div style="flex:1"><div class="olabel">3–4 days</div><div class="osub">Quick getaway</div></div><div class="radio"></div></div>
+    <div class="opt" data-q="days" data-val="7" onclick="pick(this)"><span class="oicon">🌍</span><div style="flex:1"><div class="olabel">5–7 days</div><div class="osub">Classic Ghana trip</div></div><div class="radio"></div></div>
+    <div class="opt" data-q="days" data-val="10" onclick="pick(this)"><span class="oicon">🗺️</span><div style="flex:1"><div class="olabel">8–10 days</div><div class="osub">Deep dive</div></div><div class="radio"></div></div>
+    <div class="opt" data-q="days" data-val="14" onclick="pick(this)"><span class="oicon">🏡</span><div style="flex:1"><div class="olabel">11–14 days</div><div class="osub">Full immersion</div></div><div class="radio"></div></div>
+    <div class="opt" data-q="days" data-val="14" onclick="pick(this)"><span class="oicon">🇬🇭</span><div style="flex:1"><div class="olabel">2+ weeks</div><div class="osub">Living like a local</div></div><div class="radio"></div></div>
   </div>
   <div class="bnav">
     <button class="bbk" onclick="go(1)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-    <button class="bnxt" id="b2" onclick="go(3)" disabled>
-      Continue
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    </button>
+    <button class="bnxt" id="b2" onclick="go(3)" disabled>Continue <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -213,38 +342,15 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <h1 class="title">Who's joining you?</h1>
   <p class="sub">Your travel group shapes every recommendation we make.</p>
   <div class="opts">
-    <div class="opt" data-q="group" data-val="solo" onclick="pick(this)">
-      <span class="oicon">🧳</span>
-      <div style="flex:1"><div class="olabel">Solo traveler</div><div class="osub">Just me</div></div>
-      <div class="radio"></div>
-    </div>
-    <div class="opt" data-q="group" data-val="couple" onclick="pick(this)">
-      <span class="oicon">💑</span>
-      <div style="flex:1"><div class="olabel">Couple</div><div class="osub">Romantic getaway</div></div>
-      <div class="radio"></div>
-    </div>
-    <div class="opt" data-q="group" data-val="family" onclick="pick(this)">
-      <span class="oicon">👨‍👩‍👧</span>
-      <div style="flex:1"><div class="olabel">Family with kids</div><div class="osub">Family-friendly experiences</div></div>
-      <div class="radio"></div>
-    </div>
-    <div class="opt" data-q="group" data-val="friends" onclick="pick(this)">
-      <span class="oicon">🎉</span>
-      <div style="flex:1"><div class="olabel">Friend group</div><div class="osub">The crew is coming</div></div>
-      <div class="radio"></div>
-    </div>
-    <div class="opt" data-q="group" data-val="corporate" onclick="pick(this)">
-      <span class="oicon">💼</span>
-      <div style="flex:1"><div class="olabel">Corporate / Retreat</div><div class="osub">Work meets culture</div></div>
-      <div class="radio"></div>
-    </div>
+    <div class="opt" data-q="group" data-val="solo" onclick="pick(this)"><span class="oicon">🧳</span><div style="flex:1"><div class="olabel">Solo traveler</div><div class="osub">Just me</div></div><div class="radio"></div></div>
+    <div class="opt" data-q="group" data-val="couple" onclick="pick(this)"><span class="oicon">💑</span><div style="flex:1"><div class="olabel">Couple</div><div class="osub">Romantic getaway</div></div><div class="radio"></div></div>
+    <div class="opt" data-q="group" data-val="family" onclick="pick(this)"><span class="oicon">👨‍👩‍👧</span><div style="flex:1"><div class="olabel">Family with kids</div><div class="osub">Family-friendly experiences</div></div><div class="radio"></div></div>
+    <div class="opt" data-q="group" data-val="friends" onclick="pick(this)"><span class="oicon">🎉</span><div style="flex:1"><div class="olabel">Friend group</div><div class="osub">The crew is coming</div></div><div class="radio"></div></div>
+    <div class="opt" data-q="group" data-val="corporate" onclick="pick(this)"><span class="oicon">💼</span><div style="flex:1"><div class="olabel">Corporate / Retreat</div><div class="osub">Work meets culture</div></div><div class="radio"></div></div>
   </div>
   <div class="bnav">
     <button class="bbk" onclick="go(2)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-    <button class="bnxt" id="b3" onclick="go(4)" disabled>
-      Continue
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    </button>
+    <button class="bnxt" id="b3" onclick="go(4)" disabled>Continue <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -255,48 +361,17 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <p class="sub">Pick one or more regions. We'll build your route around them.</p>
   <div class="multi-hint">Select all that apply</div>
   <div class="opts">
-    <div class="opt" data-q="regions" data-val="Greater Accra" onclick="tog(this)">
-      <span class="oicon">🏙️</span>
-      <div style="flex:1"><div class="olabel">Greater Accra</div><div class="osub">Accra city, beaches, Ada Foah</div></div>
-      <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-    </div>
-    <div class="opt" data-q="regions" data-val="Central" onclick="tog(this)">
-      <span class="oicon">🏰</span>
-      <div style="flex:1"><div class="olabel">Central Region</div><div class="osub">Cape Coast, Elmina, Kakum</div></div>
-      <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-    </div>
-    <div class="opt" data-q="regions" data-val="Volta" onclick="tog(this)">
-      <span class="oicon">🏔️</span>
-      <div style="flex:1"><div class="olabel">Volta Region</div><div class="osub">Waterfalls, mountains, lake</div></div>
-      <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-    </div>
-    <div class="opt" data-q="regions" data-val="Ashanti" onclick="tog(this)">
-      <span class="oicon">👑</span>
-      <div style="flex:1"><div class="olabel">Ashanti Region</div><div class="osub">Kumasi, kente, royal culture</div></div>
-      <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-    </div>
-    <div class="opt" data-q="regions" data-val="Eastern" onclick="tog(this)">
-      <span class="oicon">🌊</span>
-      <div style="flex:1"><div class="olabel">Eastern Region</div><div class="osub">Akosombo dam, Aburi gardens</div></div>
-      <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-    </div>
-    <div class="opt" data-q="regions" data-val="Western" onclick="tog(this)">
-      <span class="oicon">🌴</span>
-      <div style="flex:1"><div class="olabel">Western Region</div><div class="osub">Rainforest, Busua beach, surf</div></div>
-      <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-    </div>
-    <div class="opt" data-q="regions" data-val="Savannah" onclick="tog(this)">
-      <span class="oicon">🦒</span>
-      <div style="flex:1"><div class="olabel">Savannah / North</div><div class="osub">Mole Safari, Tamale, Larabanga</div></div>
-      <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-    </div>
+    <div class="opt" data-q="regions" data-val="Greater Accra" onclick="tog(this)"><span class="oicon">🏙️</span><div style="flex:1"><div class="olabel">Greater Accra</div><div class="osub">Accra city, beaches, Ada Foah</div></div><div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+    <div class="opt" data-q="regions" data-val="Central" onclick="tog(this)"><span class="oicon">🏰</span><div style="flex:1"><div class="olabel">Central Region</div><div class="osub">Cape Coast, Elmina, Kakum</div></div><div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+    <div class="opt" data-q="regions" data-val="Volta" onclick="tog(this)"><span class="oicon">🏔️</span><div style="flex:1"><div class="olabel">Volta Region</div><div class="osub">Waterfalls, mountains, lake</div></div><div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+    <div class="opt" data-q="regions" data-val="Ashanti" onclick="tog(this)"><span class="oicon">👑</span><div style="flex:1"><div class="olabel">Ashanti Region</div><div class="osub">Kumasi, kente, royal culture</div></div><div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+    <div class="opt" data-q="regions" data-val="Eastern" onclick="tog(this)"><span class="oicon">🌊</span><div style="flex:1"><div class="olabel">Eastern Region</div><div class="osub">Akosombo dam, Aburi gardens</div></div><div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+    <div class="opt" data-q="regions" data-val="Western" onclick="tog(this)"><span class="oicon">🌴</span><div style="flex:1"><div class="olabel">Western Region</div><div class="osub">Rainforest, Busua beach, surf</div></div><div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+    <div class="opt" data-q="regions" data-val="Savannah" onclick="tog(this)"><span class="oicon">🦒</span><div style="flex:1"><div class="olabel">Savannah / North</div><div class="osub">Mole Safari, Tamale, Larabanga</div></div><div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
   </div>
   <div class="bnav">
     <button class="bbk" onclick="go(3)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
-    <button class="bnxt" id="b4" onclick="go(5)" disabled>
-      Continue
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    </button>
+    <button class="bnxt" id="b4" onclick="go(5)" disabled>Continue <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
   </div>
 </div>
 
@@ -307,21 +382,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   <p class="sub">Tell us how you travel and what lights you up.</p>
   <div class="qlabel">Travel style</div>
   <div class="opts">
-    <div class="opt" data-q="style" data-val="grounded" onclick="pick(this)">
-      <span class="oicon">🌿</span>
-      <div style="flex:1"><div class="olabel">Grounded & Genuine</div><div class="osub">4★ stays · meals · curated experiences · from $250/day</div></div>
-      <div class="radio"></div>
-    </div>
-    <div class="opt" data-q="style" data-val="comfort" onclick="pick(this)">
-      <span class="oicon">✨</span>
-      <div style="flex:1"><div class="olabel">Comfort & Culture</div><div class="osub">4★ boutique · private transport · elevated · from $350/day</div></div>
-      <div class="radio"></div>
-    </div>
-    <div class="opt" data-q="style" data-val="soft-life" onclick="pick(this)">
-      <span class="oicon">🥂</span>
-      <div style="flex:1"><div class="olabel">Soft Life & Premium</div><div class="osub">Premium stays · private driver · concierge · from $450/day</div></div>
-      <div class="radio"></div>
-    </div>
+    <div class="opt" data-q="style" data-val="grounded" onclick="pick(this)"><span class="oicon">🌿</span><div style="flex:1"><div class="olabel">Grounded & Genuine</div><div class="osub">4★ stays · meals · curated experiences · from $250/day</div></div><div class="radio"></div></div>
+    <div class="opt" data-q="style" data-val="comfort" onclick="pick(this)"><span class="oicon">✨</span><div style="flex:1"><div class="olabel">Comfort & Culture</div><div class="osub">4★ boutique · private transport · elevated · from $350/day</div></div><div class="radio"></div></div>
+    <div class="opt" data-q="style" data-val="soft-life" onclick="pick(this)"><span class="oicon">🥂</span><div style="flex:1"><div class="olabel">Soft Life & Premium</div><div class="osub">Premium stays · private driver · concierge · from $450/day</div></div><div class="radio"></div></div>
   </div>
   <div class="divider"></div>
   <div class="qlabel">What's your vibe?</div>
@@ -347,22 +410,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   </div>
 </div>
 
-<!-- PAYWALL MODAL -->
-<div class="pw-overlay" id="pwModal">
-  <div class="pw-card">
-    <div class="pw-pill"></div>
-    <div class="pw-icon">✈️</div>
-    <h2 class="pw-title">Your free plan has been used</h2>
-    <p class="pw-sub">Your first Ghana itinerary was on us. Generate another personalised plan for just $4.99.</p>
-    <div class="pw-price">
-      <span class="pw-amount">$4.99</span>
-      <span class="pw-per">per plan</span>
-    </div>
-    <button class="pw-btn" onclick="payAndGenerate()">Unlock My Plan →</button>
-    <button class="pw-skip" onclick="closePw()">Maybe later</button>
-  </div>
-</div>
-
 <!-- LOADING -->
 <div id="loading">
   <div class="spin-wrap">
@@ -379,7 +426,190 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
   </div>
 </div>
 
+</div><!-- end #intake-view -->
+
+<!-- ─── PAYWALL MODAL ─── -->
+<div class="pw-overlay" id="pwModal">
+  <div class="pw-card">
+    <div class="pw-pill"></div>
+    <div class="pw-icon">✈️</div>
+    <h2 class="pw-title">Your free plan has been used</h2>
+    <p class="pw-sub">Your first Ghana itinerary was on us. Generate another personalised plan for just $4.99.</p>
+    <div class="pw-price"><span class="pw-amount">$4.99</span><span class="pw-per">per plan</span></div>
+    <button class="pw-btn" onclick="payAndGenerate()">Unlock My Plan →</button>
+    <button class="pw-skip" onclick="closePw()">Maybe later</button>
+  </div>
+</div>
+
+<!-- ─── PLAN VIEW ─── -->
+<div id="plan-view">
+
+<section class="pv-hero">
+  <div class="pv-hero-img"></div>
+  <div class="pv-hero-top">
+    <div class="pv-logo"><img src="plan/akwaaba-logo.png" alt="Akwaaba"></div>
+    <div class="pv-hero-badge">Your Plan is Ready</div>
+  </div>
+  <div class="pv-hero-content">
+    <div class="pv-greeting" id="pv-greeting">Akwaaba</div>
+    <h1 class="pv-hero-title">Your Ghana<span>Journey Awaits.</span></h1>
+    <div class="pv-chips">
+      <div class="pv-chip" id="pv-chip-days"><span class="icon">📅</span> 5 Days</div>
+      <div class="pv-chip" id="pv-chip-regions"><span class="icon">📍</span> Accra</div>
+      <div class="pv-chip" id="pv-chip-dates"><span class="icon">✈️</span> 2026</div>
+    </div>
+    <div class="pv-style-card">
+      <div>
+        <div class="sc-label">Trip Style</div>
+        <div class="sc-name" id="pv-sc-name">Grounded &amp; Genuine</div>
+        <div class="sc-price" id="pv-sc-price">From $250+ / day</div>
+        <div class="sc-features" id="pv-sc-features">4★ stays • meals • curated experiences</div>
+      </div>
+      <div class="sc-stars">★★★★</div>
+    </div>
+    <div class="pv-scroll-hint">Scroll to explore your itinerary</div>
+  </div>
+</section>
+
+<div class="route-bar" id="pv-route-bar"></div>
+
+<div class="section-label">
+  <div class="eyebrow">Day by Day</div>
+  <h2>Your Itinerary</h2>
+</div>
+
+<div class="days-stack" id="pv-days-stack"></div>
+
+<div class="section-divider"></div>
+<div class="perks-strip">
+  <div class="perk"><div class="perk-icon">📶</div><div class="perk-title">24/7 WiFi</div><div class="perk-sub">Included throughout your stay</div></div>
+  <div class="perk-divider"></div>
+  <div class="perk"><div class="perk-icon">🛡️</div><div class="perk-title">Travel Insurance</div><div class="perk-sub">Sanlam Allianz · activates on arrival</div></div>
+</div>
+<div class="section-divider"></div>
+
+<div class="info-section">
+  <div class="eyebrow">Good to Know</div>
+  <div class="info-grid">
+    <div class="info-card"><span class="i-icon">💵</span><div class="i-label">Currency</div><div class="i-value">Ghanaian Cedi (GHS)</div></div>
+    <div class="info-card"><span class="i-icon">🚗</span><div class="i-label">Transport</div><div class="i-value">Bolt & Uber available</div></div>
+    <div class="info-card"><span class="i-icon">🤳</span><div class="i-label">Photos</div><div class="i-value">Ask before photographing people</div></div>
+    <div class="info-card"><span class="i-icon">🛍️</span><div class="i-label">Markets</div><div class="i-value">Bargaining is common & expected</div></div>
+  </div>
+</div>
+
+<div class="packing-section">
+  <div class="eyebrow">Pack This</div>
+  <div class="pack-row">
+    <div class="pack-chip">👕 Light clothing</div>
+    <div class="pack-chip">👟 Walking shoes</div>
+    <div class="pack-chip">🧴 Sunscreen</div>
+    <div class="pack-chip">🦟 Insect repellent</div>
+    <div class="pack-chip">🩱 Swimwear</div>
+    <div class="pack-chip">🎒 Day pack</div>
+  </div>
+</div>
+
+<div class="concierge-section">
+  <div class="concierge-glow"></div>
+  <div class="concierge-inner">
+    <div class="concierge-eyebrow">⚡ Premium Service</div>
+    <div class="concierge-title">Want us to<br>handle <span>everything?</span></div>
+    <div class="concierge-sub">One call. Every detail sorted. Hotels, flights, visa, transport — all coordinated for you.</div>
+    <ul class="concierge-list">
+      <li>Refine & personalize your itinerary</li>
+      <li>Hotel selection & booking guidance</li>
+      <li>Flights & Ghana visa planning</li>
+      <li>Transport & experience coordination</li>
+      <li>Complimentary Sanlam Allianz insurance activated</li>
+      <li>24/7 WiFi setup for your stay</li>
+    </ul>
+    <div class="concierge-price-row">
+      <div><div class="price-label">One-time planning fee</div><div class="price-per">Private video call included</div></div>
+      <div><div class="price-amount">$49.99</div></div>
+    </div>
+    <a href="https://calendly.com/theakwaabaapp/30min" class="btn-primary">Book My Planning Call →</a>
+    <button class="btn-secondary" onclick="location.reload()">← Plan Another Trip</button>
+  </div>
+</div>
+
+<div class="share-section">
+  <div class="eyebrow">Share Your Plan</div>
+  <h3>Tell the world<br>you're going to Ghana.</h3>
+  <div class="social-card">
+    <div class="social-card-bg"></div>
+    <div class="social-card-content">
+      <div class="social-card-logo">Akwaaba</div>
+      <div>
+        <span class="social-flag">🇬🇭</span>
+        <div class="social-card-title">My Ghana<br>Trip Plan</div>
+        <div class="social-regions" id="pv-social-regions"></div>
+        <div class="social-tagline" id="pv-social-tagline"></div>
+      </div>
+      <div class="social-card-footer">
+        <div class="social-generated">Generated by Akwaaba AI</div>
+        <div class="social-days-badge" id="pv-social-days">5 Days</div>
+      </div>
+    </div>
+  </div>
+  <div class="share-buttons">
+    <a href="#" class="share-btn" onclick="openSaveSheet(event)"><span class="s-icon">💾</span> Save to Phone</a>
+    <a href="#" class="share-btn" onclick="copyLink(event)"><span class="s-icon">🔗</span> Copy Link</a>
+    <a href="#" class="share-btn"><span class="s-icon">🖼️</span> Download Image</a>
+    <a href="#" class="share-btn" id="pv-email-btn"><span class="s-icon">📧</span> Email My Plan</a>
+  </div>
+</div>
+
+<div class="app-section">
+  <div class="eyebrow">Get the App</div>
+  <h3>Plan more Ghana trips<br>on the Akwaaba app.</h3>
+  <p>Browse experiences, track your trip, and discover what's happening in Ghana — all in one place.</p>
+  <div class="app-badges">
+    <a href="https://onelink.to/skw55b" class="app-badge"><div class="app-badge-icon">🍎</div><div class="app-badge-text"><div class="app-badge-sub">Download on the</div><div class="app-badge-store">App Store</div></div></a>
+    <a href="https://onelink.to/skw55b" class="app-badge"><div class="app-badge-icon">▶</div><div class="app-badge-text"><div class="app-badge-sub">Get it on</div><div class="app-badge-store">Google Play</div></div></a>
+  </div>
+</div>
+
+<div class="sticky-footer">
+  <a href="https://calendly.com/theakwaabaapp/30min" class="btn-primary">Book My Ghana Concierge Call — $49.99</a>
+</div>
+
+<footer class="site-footer">
+  <img src="plan/akwaaba-logo.png" alt="Akwaaba">
+  <div class="footer-name">Akwaaba App</div>
+  <div class="footer-legal">A licensed and registered company<br>with offices in the United States and Ghana.<br><br>© 2025 Akwaaba App. All rights reserved.</div>
+</footer>
+<div class="bottom-space"></div>
+
+<!-- Save Sheet -->
+<div class="sheet-overlay" id="saveSheet" onclick="closeSaveSheet(event)">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Your Ghana Trip Card</div>
+    <div class="save-card" id="tripCard">
+      <div class="save-card-bg"></div>
+      <div class="save-card-content">
+        <div class="save-card-top"><img src="plan/akwaaba-logo.png" alt="Akwaaba"><span>Akwaaba App</span></div>
+        <div class="save-card-body">
+          <span class="save-card-flag">🇬🇭</span>
+          <div class="save-card-name" id="sc-save-name">Your<span>Ghana Journey</span></div>
+          <div class="save-card-chips" id="sc-save-chips"></div>
+          <div class="save-card-days" id="sc-save-days"></div>
+        </div>
+        <div class="save-card-footer">Generated by Akwaaba AI Trip Planner</div>
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <a href="#" class="btn-primary" onclick="downloadCard(event)">💾 &nbsp;Save Image to Phone</a>
+      <button class="sheet-close" onclick="closeSaveSheet()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #plan-view -->
+
 <script>
+// ─── INTAKE ───────────────────────────────────────
 const A={};
 const M={regions:new Set(),vibe:new Set()};
 let cur=1;
@@ -444,23 +674,13 @@ const PW_KEY='akw_plans_used';
 
 function checkPaywall(){
   const used=parseInt(localStorage.getItem(PW_KEY)||'0');
-  if(used>=1){
-    document.getElementById('pwModal').classList.add('on');
-    return true;
-  }
+  if(used>=1){document.getElementById('pwModal').classList.add('on');return true;}
   return false;
 }
 
-function closePw(){
-  document.getElementById('pwModal').classList.remove('on');
-}
+function closePw(){document.getElementById('pwModal').classList.remove('on');}
 
-function payAndGenerate(){
-  // Placeholder: in production this would open Stripe checkout
-  // For now, mark as paid and proceed
-  closePw();
-  doGenerate();
-}
+function payAndGenerate(){closePw();doGenerate();}
 
 async function generate(){
   if(checkPaywall())return;
@@ -489,8 +709,7 @@ async function doGenerate(){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        name,
-        email,
+        name,email,
         days:parseInt(A.days)||7,
         dates:A.month+' 2026',
         group:A.group,
@@ -500,31 +719,135 @@ async function doGenerate(){
         pairing:A.pairing
       })
     });
-
     clearInterval(iv);
     steps.forEach(s=>document.getElementById(s).className='lstep done');
-
     if(!res.ok)throw new Error('API error '+res.status);
     const data=await res.json();
-
-    // Mark one plan used
     const used=parseInt(localStorage.getItem(PW_KEY)||'0');
     localStorage.setItem(PW_KEY,String(used+1));
-
-    setTimeout(()=>{window.location.href=data.redirectUrl;},600);
-
+    setTimeout(()=>showPlan(data.redirectUrl),600);
   }catch(err){
     clearInterval(iv);
-    loading.innerHTML=`
-      <div style="text-align:center;padding:40px 24px">
-        <div style="font-size:48px;margin-bottom:16px">⚠️</div>
-        <h2 style="font-family:'Syne',sans-serif;font-size:22px;margin-bottom:8px">Something went wrong</h2>
-        <p style="color:#7A8A80;font-size:14px;margin-bottom:24px">Please try again</p>
-        <button onclick="location.reload()" style="padding:14px 28px;border-radius:12px;border:none;background:#2A6B50;color:#fff;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer">Try Again</button>
-      </div>
-    `;
+    loading.innerHTML=`<div style="text-align:center;padding:40px 24px"><div style="font-size:48px;margin-bottom:16px">⚠️</div><h2 style="font-family:'Syne',sans-serif;font-size:22px;margin-bottom:8px">Something went wrong</h2><p style="color:#7A8A80;font-size:14px;margin-bottom:24px">Please try again</p><button onclick="location.reload()" style="padding:14px 28px;border-radius:12px;border:none;background:#2A6B50;color:#fff;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer">Try Again</button></div>`;
+  }
+}
+
+// ─── PLAN RENDERER ────────────────────────────────
+function showPlan(redirectUrl){
+  const qs=redirectUrl.includes('?')?redirectUrl.split('?')[1]:redirectUrl;
+  const p=new URLSearchParams(qs);
+  const name=p.get('name')||'Traveler';
+  const days=parseInt(p.get('days'))||4;
+  const dates=p.get('dates')||'';
+  const style=p.get('style')||'Grounded & Genuine';
+  const regionsStr=p.get('regions')||'Accra';
+  const vibe=p.get('vibe')||'culture';
+  const regions=regionsStr.split(',').map(r=>r.trim()).filter(Boolean);
+
+  const tiers={
+    'Grounded & Genuine':{price:'From $250+ / day',features:'4★ stays • meals • curated experiences'},
+    'Comfort & Culture':{price:'From $350+ / day',features:'4★ boutique • private transport • elevated'},
+    'Soft Life & Premium':{price:'From $450+ / day',features:'Premium stays • private driver • concierge'}
+  };
+  const tier=tiers[style]||tiers['Grounded & Genuine'];
+
+  document.getElementById('pv-greeting').textContent='Akwaaba, '+name;
+  document.getElementById('pv-chip-days').innerHTML='<span class="icon">📅</span> '+days+' Days';
+  document.getElementById('pv-chip-regions').innerHTML='<span class="icon">📍</span> '+regions.slice(0,3).join(' • ');
+  document.getElementById('pv-chip-dates').innerHTML='<span class="icon">✈️</span> '+dates;
+  document.getElementById('pv-sc-name').textContent=style;
+  document.getElementById('pv-sc-price').textContent=tier.price;
+  document.getElementById('pv-sc-features').textContent=tier.features;
+
+  // Route bar
+  document.getElementById('pv-route-bar').innerHTML=regions.map((r,i)=>
+    '<div class="route-stop"><div class="route-dot'+(i===0?' start':'')+'"></div><div class="route-name">'+r+'</div></div>'+
+    (i<regions.length-1?'<div class="route-arrow">→</div>':'')
+  ).join('');
+
+  // Day cards
+  let cards='';
+  for(let i=1;i<=days;i++){
+    const title=p.get('d'+i)||'Day '+i;
+    const actStr=p.get('d'+i+'a')||'';
+    const img=((i-1)%4)+1;
+    const loc=regions[Math.min(i-1,regions.length-1)]||regions[0]||'Ghana';
+    let acts='';
+    if(actStr){
+      actStr.split('|').slice(0,4).forEach(a=>{
+        const[icon,aname,adesc]=a.split('~');
+        acts+='<div class="activity-row"><div class="activity-icon">'+(icon||'📍')+'</div><div class="activity-info"><div class="activity-name">'+(aname||'Activity')+'</div><div class="activity-desc">'+(adesc||'')+'</div></div></div>';
+      });
+    }
+    cards+='<div class="day-card day-img-'+img+'"><div class="day-card-img"></div><div class="day-card-content"><div class="day-number">Day '+String(i).padStart(2,'0')+' · '+loc+'</div><div class="day-title">'+title+'</div><div class="activities">'+acts+'</div></div></div>';
+  }
+  document.getElementById('pv-days-stack').innerHTML=cards;
+
+  // Social card
+  document.getElementById('pv-social-regions').innerHTML=regions.slice(0,3).map(r=>'<div class="social-region-chip">'+r+'</div>').join('');
+  document.getElementById('pv-social-tagline').textContent=days+' Days · '+(vibe.charAt(0).toUpperCase()+vibe.slice(1));
+  document.getElementById('pv-social-days').textContent=days+' Days';
+
+  // Save card
+  document.getElementById('sc-save-name').innerHTML=name+"'s<span>Ghana Journey</span>";
+  document.getElementById('sc-save-chips').innerHTML='<div class="save-card-chip">'+days+' Days</div><div class="save-card-chip">'+style+'</div><div class="save-card-chip">'+dates+'</div>';
+  let saveDays='';
+  for(let i=1;i<=Math.min(days,4);i++){saveDays+='<div class="save-card-day">Day '+i+' — '+(p.get('d'+i)||'Day '+i)+'</div>';}
+  document.getElementById('sc-save-days').innerHTML=saveDays;
+
+  // Switch views
+  document.getElementById('loading').classList.remove('on');
+  document.getElementById('intake-view').style.display='none';
+  document.title=name+"'s Ghana Trip — Akwaaba";
+  const pv=document.getElementById('plan-view');
+  pv.style.opacity='0';
+  pv.style.display='block';
+  requestAnimationFrame(()=>{
+    pv.style.transition='opacity 0.5s ease';
+    pv.style.opacity='1';
+  });
+  window.scrollTo(0,0);
+}
+
+// ─── PLAN INTERACTIONS ────────────────────────────
+function openSaveSheet(e){
+  e.preventDefault();
+  document.getElementById('saveSheet').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeSaveSheet(e){
+  if(e&&e.target!==document.getElementById('saveSheet'))return;
+  document.getElementById('saveSheet').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function copyLink(e){
+  e.preventDefault();
+  navigator.clipboard.writeText(window.location.href).then(()=>{
+    const btn=e.currentTarget;
+    const orig=btn.innerHTML;
+    btn.innerHTML='<span class="s-icon">✓</span> Copied!';
+    setTimeout(()=>{btn.innerHTML=orig;},2000);
+  });
+}
+
+async function downloadCard(e){
+  e.preventDefault();
+  const card=document.getElementById('tripCard');
+  if(typeof html2canvas!=='undefined'){
+    const canvas=await html2canvas(card,{scale:3,useCORS:true});
+    const link=document.createElement('a');
+    link.download='my-ghana-trip-akwaaba.png';
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+  }else if(navigator.share){
+    navigator.share({title:'My Ghana Trip Plan',text:'Generated by Akwaaba AI Trip Planner',url:window.location.href});
+  }else{
+    alert('Right-click the card above and choose "Save Image" to save it.');
   }
 }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" async></script>
 </body>
 </html>
