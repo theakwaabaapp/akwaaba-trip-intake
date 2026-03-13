@@ -191,6 +191,15 @@
     margin-top: 2px;
   }
 
+  .hero-style-card .features {
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 400;
+    margin-top: 5px;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+  }
+
   .hero-style-card .stars {
     font-size: 22px;
     letter-spacing: 2px;
@@ -1177,8 +1186,9 @@
     <div class="hero-style-card">
       <div>
         <div class="label">Trip Style</div>
-        <div class="name">Grounded & Genuine</div>
-        <div class="price">From $250 / day</div>
+        <div class="name" id="sc-name">Grounded & Genuine</div>
+        <div class="price" id="sc-price">From $250+ / day</div>
+        <div class="features" id="sc-features">4★ stays • meals • curated experiences</div>
       </div>
       <div class="stars">★★★★</div>
     </div>
@@ -1600,6 +1610,21 @@
       }
     }
   }
+</script>
+
+<script>
+  (function(){
+    const tiers = {
+      'Grounded & Genuine':  { price: 'From $250+ / day', features: '4\u2605 stays \u2022 meals \u2022 curated experiences' },
+      'Comfort & Culture':   { price: 'From $350+ / day', features: '4\u2605 boutique \u2022 private transport \u2022 elevated experiences' },
+      'Soft Life & Premium': { price: 'From $450+ / day', features: 'Premium stays \u2022 private driver \u2022 concierge' }
+    };
+    const style = new URLSearchParams(window.location.search).get('style') || 'Grounded & Genuine';
+    const t = tiers[style] || tiers['Grounded & Genuine'];
+    document.getElementById('sc-name').textContent = style;
+    document.getElementById('sc-price').textContent = t.price;
+    document.getElementById('sc-features').textContent = t.features;
+  })();
 </script>
 
 <!-- Load html2canvas for image export (loads async, doesn't block page) -->
