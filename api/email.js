@@ -20,57 +20,44 @@ export default async function handler(req, res) {
       'User-Agent': 'AkwaabaApp/1.0'
     };
 
-    // Build custom fields
+    // Build custom fields using Flodesk's camelCase keys
     const custom_fields = {
       source: 'Ghana Trip Planner',
-      trip_style: style || '',
-      trip_days: String(days || ''),
-      trip_dates: dates || '',
+      tripStyle: style || '',
+      tripDays: String(days || ''),
+      tripDates: dates || '',
       regions: Array.isArray(regions) ? regions.join(' • ') : (regions || ''),
-      trip_vibe: vibe || '',
+      tripVibe: vibe || '',
     };
 
-    // Add day titles as custom fields
+    // Day titles (day1–day7)
     if (Array.isArray(dayTitles)) {
-      dayTitles.slice(0, 10).forEach((title, i) => {
-        custom_fields[`day_${i + 1}`] = title || '';
+      dayTitles.slice(0, 7).forEach((title, i) => {
+        custom_fields[`day${i + 1}`] = title || '';
       });
     }
 
-    // 1. Create / update subscriber
+    // Create / update subscriber AND add to segment in one call
     const subRes = await fetch('https://api.flodesk.com/v1/subscribers', {
       method: 'POST',
       headers,
       body: JSON.stringify({
         email,
         first_name: name,
-        custom_fields,
-        status: 'active'
+        status: 'active',
+        segment_ids: [segmentId],
+        custom_fields
       })
     });
 
+    const subData = await subRes.json();
+
     if (!subRes.ok) {
-      const err = await subRes.text();
-      console.error('Flodesk subscriber error:', err);
-      // Don't block — still try segment add
+      console.error('Flodesk error:', JSON.stringify(subData));
+      return res.status(200).json({ success: false, error: subData.message });
     }
 
-    // 2. Add to "Ghana Trip Planner" segment → triggers the workflow
-    const segRes = await fetch(
-      `https://api.flodesk.com/v1/subscribers/${encodeURIComponent(email)}/segments`,
-      {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ segment_ids: [segmentId] })
-      }
-    );
-
-    if (!segRes.ok) {
-      const err = await segRes.text();
-      console.error('Flodesk segment error:', err);
-    }
-
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true, segments: subData.segments?.length });
 
   } catch (error) {
     console.error('Email API error:', error);
