@@ -3,235 +3,107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Plan Your Ghana Trip — Akwaaba AI</title>
+<title>Plan Your Ghana Trip - Akwaaba AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --gold:#C8963E;--gold-lt:#E8B86D;--gold-dim:rgba(200,150,62,.12);
-  --dark:#080F0A;--green:#1E4D3A;--gl:#2A6B50;
-  --border:rgba(255,255,255,0.09);--card:rgba(255,255,255,0.045);
-  --muted:#7A8A80;--w:#fff;
-  --red:#CE1126;--ghana-gold:#FCD116;--ghana-green:#006B3F;
-}
+:root{--gold:#C8963E;--gold-lt:#E8B86D;--dark:#080F0A;--green:#1E4D3A;--gl:#2A6B50;--border:rgba(255,255,255,0.1);--card:rgba(255,255,255,0.055);--muted:#7A8A80;--w:#fff}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
-body{
-  font-family:'Inter',sans-serif;background:var(--dark);color:var(--w);
-  max-width:480px;margin:0 auto;min-height:100svh;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative;
-}
-body::before{
-  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 70% 45% at 10% 15%, rgba(42,107,80,.18) 0%,transparent 70%),
-    radial-gradient(ellipse 55% 40% at 90% 80%, rgba(200,150,62,.12) 0%,transparent 65%),
-    radial-gradient(ellipse 45% 35% at 50% 100%, rgba(206,17,38,.06) 0%,transparent 60%);
-}
-
-/* ── GHANA FLAG STRIP (Red · Gold · Green) ── */
-.ghana-strip{
-  position:fixed;top:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:480px;height:3px;z-index:200;
-  background:linear-gradient(90deg,#CE1126 33.3%,#FCD116 33.3% 66.6%,#006B3F 66.6%);
-}
-
-/* ── PROGRESS BAR ── */
-.pbar{
-  position:fixed;top:3px;left:50%;transform:translateX(-50%);
-  width:100%;max-width:480px;z-index:100;
-  padding:max(env(safe-area-inset-top),16px) 24px 14px;
-  background:linear-gradient(to bottom,rgba(8,15,10,.97) 65%,transparent);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-}
+body{font-family:'Inter',sans-serif;background:var(--dark);color:var(--w);max-width:480px;margin:0 auto;min-height:100svh;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 15% 20%,rgba(42,107,80,.22) 0%,transparent 70%),radial-gradient(ellipse 50% 35% at 85% 75%,rgba(200,150,62,.1) 0%,transparent 65%),radial-gradient(ellipse 40% 30% at 50% 50%,rgba(30,77,58,.12) 0%,transparent 70%)}
+.ghana-strip{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:3px;z-index:200;background:linear-gradient(90deg,#CE1126 33.3%,#FCD116 33.3% 66.6%,#006B3F 66.6%)}
+.pbar{position:fixed;top:3px;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:100;padding:max(env(safe-area-inset-top),16px) 24px 14px;background:linear-gradient(to bottom,rgba(8,15,10,.97) 60%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .pbar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}
 .logo{display:flex;align-items:center;gap:9px}
 .logo span{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;letter-spacing:-.3px}
 .sdots{display:flex;gap:6px;align-items:center}
-.sdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.12);transition:all .4s cubic-bezier(.4,0,.2,1)}
-.sdot.active{width:22px;border-radius:3px;background:linear-gradient(90deg,var(--gl),var(--gold))}
+.sdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .4s cubic-bezier(.4,0,.2,1)}
+.sdot.active{width:20px;border-radius:3px;background:linear-gradient(90deg,var(--gl),var(--gold))}
 .sdot.done{background:var(--gl)}
-.track{height:2px;background:rgba(255,255,255,.07);border-radius:2px;position:relative}
+.track{height:2.5px;background:rgba(255,255,255,.08);border-radius:2px;overflow:visible;position:relative}
 .fill{height:100%;background:linear-gradient(90deg,var(--gl),var(--gold));border-radius:2px;transition:width .5s cubic-bezier(.4,0,.2,1);position:relative}
-.fill::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px 3px rgba(200,150,62,.5)}
-
-/* ── SCREENS ── */
-.screen{display:none;min-height:100svh;flex-direction:column;padding:96px 20px max(env(safe-area-inset-bottom),40px);position:relative;z-index:1}
-.screen.on{display:flex;animation:slideUp .34s cubic-bezier(.22,1,.36,1)}
-.screen.back{animation:slideDown .3s cubic-bezier(.22,1,.36,1)}
-@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-@keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
-
-/* ── HERO CARD (Step 1) ── */
-.hero-card{
-  position:relative;border-radius:22px;overflow:hidden;height:230px;
-  margin-bottom:28px;border:1px solid rgba(200,150,62,.2);
-  box-shadow:0 20px 60px rgba(0,0,0,.5);flex-shrink:0;
-}
-.hero-img{
-  position:absolute;inset:0;
-  background:url('https://images.unsplash.com/photo-1735295442385-4c835f6bdbad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixlib=rb-4.1.0&q=80&w=800') center/cover;
-  transform:scale(1.02);transition:transform 8s ease;
-}
-.hero-card:hover .hero-img{transform:scale(1.06)}
-.hero-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to bottom,rgba(8,15,10,.1) 0%,rgba(8,15,10,.55) 50%,rgba(8,15,10,.92) 100%);
-}
-.hero-content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 22px}
-.hero-locs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.hero-loc{
-  background:rgba(200,150,62,.18);border:1px solid rgba(200,150,62,.35);
-  border-radius:20px;padding:4px 10px;
-  font-size:10px;font-weight:700;color:var(--gold-lt);
-  letter-spacing:.08em;text-transform:uppercase;
-  backdrop-filter:blur(4px);
-}
-.hero-hl{
-  font-family:'Syne',sans-serif;font-size:20px;font-weight:800;
-  color:#fff;line-height:1.25;letter-spacing:-.3px;
-  text-shadow:0 2px 12px rgba(0,0,0,.4);
-}
-.hero-photo-credit{
-  position:absolute;bottom:8px;right:12px;
-  font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.03em;
-}
-
-/* ── TYPOGRAPHY ── */
-.hero-badge{display:inline-flex;align-items:center;gap:7px;background:var(--gold-dim);border:1px solid rgba(200,150,62,.25);border-radius:20px;padding:5px 13px;margin-bottom:14px;width:fit-content}
-.hero-badge span{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
-.tag{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
-.title{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1.07;letter-spacing:-.6px;margin-bottom:7px}
-.sub{font-size:13.5px;color:var(--muted);line-height:1.58;margin-bottom:26px}
-.qlabel{font-size:13px;font-weight:600;color:rgba(255,255,255,.88);margin:22px 0 10px;line-height:1.4}
+.fill::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px 2px rgba(200,150,62,.5)}
+.screen{display:none;min-height:100svh;flex-direction:column;padding:100px 24px max(env(safe-area-inset-bottom),36px);position:relative;z-index:1}
+.screen.on{display:flex;animation:slideUp .32s cubic-bezier(.22,1,.36,1)}
+.screen.back{animation:slideDown .32s cubic-bezier(.22,1,.36,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(200,150,62,.12);border:1px solid rgba(200,150,62,.2);border-radius:20px;padding:5px 12px;margin-bottom:16px;width:fit-content}
+.hero-badge span{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.tag{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.title{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;line-height:1.08;letter-spacing:-.5px;margin-bottom:6px}
+.sub{font-size:13.5px;color:var(--muted);line-height:1.55;margin-bottom:26px}
+.qlabel{font-size:13px;font-weight:600;color:rgba(255,255,255,.85);margin:20px 0 9px;line-height:1.4}
 .qlabel:first-of-type{margin-top:0}
-.multi-hint{font-size:11px;color:var(--muted);margin:-6px 0 10px}
-
-/* ── OPTION CARDS ── */
-.opts{display:flex;flex-direction:column;gap:8px}
-.opt{
-  display:flex;align-items:center;gap:13px;padding:13px 15px;border-radius:14px;
-  border:1.5px solid var(--border);background:var(--card);
-  cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);user-select:none;
-  position:relative;overflow:hidden;
-}
-.opt::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(42,107,80,.12),rgba(200,150,62,.06));opacity:0;transition:opacity .2s}
-.opt:active{transform:scale(.974)}
-.opt.sel,.opt.msel{
-  border-color:rgba(200,150,62,.45);
-  background:rgba(200,150,62,.08);
-  box-shadow:0 0 0 1px rgba(200,150,62,.1) inset, 0 4px 16px rgba(200,150,62,.08);
-}
+.multi-hint{font-size:11px;color:var(--muted);margin:-5px 0 9px}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;transition:all .18s cubic-bezier(.4,0,.2,1);user-select:none;position:relative;overflow:hidden}
+.opt::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(42,107,80,.15),rgba(200,150,62,.05));opacity:0;transition:opacity .18s}
+.opt:active{transform:scale(.975)}
+.opt.sel,.opt.msel{border-color:rgba(200,150,62,.5);background:rgba(200,150,62,.09);box-shadow:0 0 0 1px rgba(200,150,62,.12) inset}
 .opt.sel::before,.opt.msel::before{opacity:1}
-.oicon{font-size:19px;flex-shrink:0;width:28px;text-align:center}
+.oicon{font-size:18px;flex-shrink:0;width:26px;text-align:center}
 .olabel{font-size:14px;font-weight:500;color:var(--w);flex:1;line-height:1.3}
-.osub{font-size:12px;color:var(--muted);margin-top:2px}
-.radio{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.18);flex-shrink:0;transition:all .18s;position:relative;display:flex;align-items:center;justify-content:center}
+.osub{font-size:12px;color:var(--muted);margin-top:1px}
+.radio{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,.2);flex-shrink:0;transition:all .18s;position:relative;display:flex;align-items:center;justify-content:center}
 .radio::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--dark);opacity:0;transition:all .18s;transform:scale(0)}
-.opt.sel .radio{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(200,150,62,.4)}
+.opt.sel .radio{background:var(--gold);border-color:var(--gold)}
 .opt.sel .radio::after{opacity:1;transform:scale(1)}
-.chk{width:20px;height:20px;border-radius:6px;border:2px solid rgba(255,255,255,.18);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.chk{width:20px;height:20px;border-radius:6px;border:2px solid rgba(255,255,255,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s}
 .chk svg{opacity:0;transform:scale(0.5);transition:all .15s}
-.opt.msel .chk{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(200,150,62,.4)}
+.opt.msel .chk{background:var(--gold);border-color:var(--gold)}
 .opt.msel .chk svg{opacity:1;transform:scale(1)}
-
-/* ── TEXT INPUT ── */
-.txt-in{
-  width:100%;padding:16px 18px;border-radius:14px;
-  border:1.5px solid var(--border);background:var(--card);
-  color:var(--w);font-family:'Inter',sans-serif;font-size:18px;font-weight:500;
-  outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;
-}
-.txt-in:focus{border-color:rgba(200,150,62,.45);box-shadow:0 0 0 3px rgba(200,150,62,.07),0 4px 16px rgba(0,0,0,.2)}
-.txt-in::placeholder{color:rgba(255,255,255,.18);font-weight:400}
-
-/* ── MONTH GRID ── */
+.txt-in{width:100%;padding:16px 18px;border-radius:14px;border:1.5px solid var(--border);background:var(--card);color:var(--w);font-family:'Inter',sans-serif;font-size:18px;font-weight:500;outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+.txt-in:focus{border-color:rgba(200,150,62,.4);box-shadow:0 0 0 3px rgba(200,150,62,.06)}
+.txt-in::placeholder{color:rgba(255,255,255,.2);font-weight:400}
 .month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.mcell{
-  padding:11px 8px;border-radius:11px;text-align:center;
-  border:1.5px solid var(--border);background:var(--card);
-  cursor:pointer;transition:all .18s;user-select:none;
-  font-size:13px;font-weight:500;color:rgba(255,255,255,.65);
-}
-.mcell:active{transform:scale(.94)}
-.mcell.sel{
-  border-color:rgba(200,150,62,.5);background:rgba(200,150,62,.1);
-  color:var(--gold-lt);font-weight:700;
-  box-shadow:0 0 12px rgba(200,150,62,.12);
-}
-
-/* ── STEP DIVIDER ── */
-.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:24px 0 0}
-
-/* ── BUTTONS ── */
-.bnav{margin-top:auto;padding-top:32px;display:flex;gap:10px}
-.bbk{
-  width:52px;height:52px;border-radius:14px;
-  border:1.5px solid var(--border);background:var(--card);
-  color:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;transition:all .2s;
-}
-.bbk:hover{border-color:rgba(255,255,255,.18);color:var(--w)}
-.bbk:active{transform:scale(.92)}
-.bnxt{
-  flex:1;padding:16px;border-radius:14px;border:none;
-  background:linear-gradient(135deg,var(--gl) 0%,#1f5740 100%);
-  color:var(--w);font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:all .22s;box-shadow:0 4px 18px rgba(42,107,80,.28);
-}
-.bnxt:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(42,107,80,.38)}
-.bnxt:active{transform:scale(.97)}
-.bnxt:disabled{opacity:.25;cursor:not-allowed;transform:none;box-shadow:none}
-.bsub{
-  flex:1;padding:16px;border-radius:14px;border:none;
-  background:linear-gradient(135deg,#D4A030 0%,#C8963E 50%,#B8841A 100%);
-  color:#0D1B12;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:all .22s;box-shadow:0 4px 20px rgba(200,150,62,.32);
-}
-.bsub:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(200,150,62,.42)}
-.bsub:active{transform:scale(.97)}
-.bsub:disabled{opacity:.25;cursor:not-allowed;transform:none;box-shadow:none}
-
-/* ── STEP CONTEXT BAND ── */
-.step-context{
-  display:flex;align-items:center;gap:8px;margin-bottom:20px;
-  padding:10px 14px;border-radius:12px;
-  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
-}
-.step-context-icon{font-size:20px}
-.step-context-text{font-size:12px;color:var(--muted);line-height:1.4}
-.step-context-text strong{color:rgba(255,255,255,.7);font-weight:600}
-
-/* ── LOADING ── */
-#loading{
-  display:none;flex-direction:column;align-items:center;justify-content:center;
-  min-height:100svh;padding:48px 28px;text-align:center;
-  position:relative;z-index:1;
-}
+.mcell{padding:10px 8px;border-radius:10px;text-align:center;border:1.5px solid var(--border);background:var(--card);cursor:pointer;transition:all .18s;user-select:none;font-size:13px;font-weight:500;color:rgba(255,255,255,.7)}
+.mcell:active{transform:scale(.95)}
+.mcell.sel{border-color:rgba(200,150,62,.5);background:rgba(200,150,62,.09);color:var(--gold);font-weight:600}
+.divider{height:1px;background:var(--border);margin:22px 0 0;border-radius:1px}
+.bnav{margin-top:auto;padding-top:28px;display:flex;gap:10px}
+.bbk{width:52px;height:52px;border-radius:14px;border:1.5px solid var(--border);background:var(--card);color:rgba(255,255,255,.7);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s}
+.bbk:hover{border-color:rgba(255,255,255,.2);color:var(--w)}
+.bbk:active{transform:scale(.93)}
+.bnxt{flex:1;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--gl) 0%,#1f5740 100%);color:var(--w);font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;box-shadow:0 4px 16px rgba(42,107,80,.3)}
+.bnxt:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 20px rgba(42,107,80,.4)}
+.bnxt:active{transform:scale(.98)}
+.bnxt:disabled{opacity:.3;cursor:not-allowed;transform:none;box-shadow:none}
+.bsub{flex:1;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--gold) 0%,#E8B300 100%);color:#0D1B12;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;box-shadow:0 4px 18px rgba(200,150,62,.35)}
+.bsub:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 24px rgba(200,150,62,.45)}
+.bsub:active{transform:scale(.98)}
+.bsub:disabled{opacity:.3;cursor:not-allowed;transform:none;box-shadow:none}
+#loading{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100svh;padding:48px 32px;text-align:center;position:relative;z-index:1}
 #loading.on{display:flex;animation:slideUp .4s cubic-bezier(.22,1,.36,1)}
-.spin-wrap{position:relative;margin-bottom:36px}
-.spin-ring{
-  width:80px;height:80px;border-radius:50%;
-  border:3px solid rgba(255,255,255,.06);
-  border-top-color:#CE1126;border-right-color:#FCD116;
-  animation:spin 1.2s linear infinite;
-}
-.spin-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px}
+.spin-wrap{position:relative;margin-bottom:32px}
+.spin-ring{width:72px;height:72px;border-radius:50%;border:2.5px solid rgba(200,150,62,.15);border-top-color:var(--gold);animation:spin 1s linear infinite}
+.spin-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.load-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px}
-.load-sub{font-size:14px;color:var(--muted);line-height:1.6;max-width:260px}
-.load-steps{margin-top:32px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px}
-.lstep{
-  display:flex;align-items:center;gap:10px;padding:11px 15px;border-radius:12px;
-  background:var(--card);border:1px solid var(--border);
-  font-size:13px;color:var(--muted);transition:all .5s;
-}
-.lstep.active{color:var(--w);border-color:rgba(200,150,62,.3);background:rgba(200,150,62,.07);box-shadow:0 4px 16px rgba(200,150,62,.06)}
-.lstep.done{color:#2A6B50;border-color:rgba(42,107,80,.25);background:rgba(42,107,80,.05)}
+.load-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.4px;margin-bottom:8px}
+.load-sub{font-size:13.5px;color:var(--muted);line-height:1.55;max-width:260px}
+.load-steps{margin-top:28px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px}
+.lstep{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--card);border:1px solid var(--border);font-size:13px;color:var(--muted);transition:all .5s}
+.lstep.active{color:var(--w);border-color:rgba(200,150,62,.3);background:rgba(200,150,62,.06)}
+.lstep.done{color:#2A6B50;border-color:rgba(42,107,80,.3)}
 .lstep-icon{font-size:16px;flex-shrink:0}
+/* Paywall modal */
+.pw-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(8,15,10,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:flex-end;justify-content:center}
+.pw-overlay.on{display:flex;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.pw-card{background:#0F1D15;border:1.5px solid rgba(200,150,62,.25);border-radius:24px 24px 0 0;padding:36px 28px max(env(safe-area-inset-bottom),36px);width:100%;max-width:480px;animation:slideUp .32s cubic-bezier(.22,1,.36,1)}
+.pw-pill{width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 24px}
+.pw-icon{font-size:44px;text-align:center;margin-bottom:12px}
+.pw-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;text-align:center;letter-spacing:-.4px;margin-bottom:8px}
+.pw-sub{font-size:13.5px;color:#7A8A80;text-align:center;line-height:1.55;margin-bottom:24px}
+.pw-price{display:flex;align-items:baseline;justify-content:center;gap:4px;margin-bottom:28px}
+.pw-amount{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:var(--gold);letter-spacing:-2px}
+.pw-per{font-size:13px;color:var(--muted)}
+.pw-btn{width:100%;padding:16px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--gold) 0%,#E8B300 100%);color:#0D1B12;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;cursor:pointer;margin-bottom:12px;transition:all .2s;box-shadow:0 4px 18px rgba(200,150,62,.35)}
+.pw-btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(200,150,62,.45)}
+.pw-skip{width:100%;padding:14px;border-radius:14px;border:1.5px solid var(--border);background:transparent;color:rgba(255,255,255,.5);font-family:'Inter',sans-serif;font-size:14px;cursor:pointer;transition:all .2s}
+.pw-skip:hover{color:var(--w);border-color:rgba(255,255,255,.2)}
 </style>
 </head>
 <body>
@@ -241,7 +113,7 @@ body::before{
 <div class="pbar" id="pbar">
   <div class="pbar-top">
     <div class="logo">
-      <svg width="28" height="23" viewBox="0 0 52 44.19" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="30" height="25" viewBox="0 0 52 44.19" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M32.6128 21.9267C32.6165 26.0991 30.177 28.5908 25.982 28.7284C24.1936 28.7847 22.4016 28.7445 20.6095 28.7364C15.8676 28.7167 12.1698 30.7106 9.39075 34.5001C7.48577 37.1082 7.06854 38.4741 5.59251 41.454C5.00151 42.6501 4.5073 43.5416 3.88403 44.1851H0C5.89388 31.2801 11.724 18.5135 17.6472 5.54115L19.6211 10.1293C19.5126 10.4396 19.3666 10.7632 19.1965 11.0948C16.6001 16.1264 14.4348 21.3807 12.0363 26.6642C14.8476 26.3684 16.4461 25.0399 17.7806 22.0841C19.1283 19.0903 20.1322 16.8782 21.3662 14.1881L23.3079 18.7023C22.4786 20.7219 20.9417 22.6777 20.553 24.8737C23.2397 24.7815 23.8908 24.9352 25.7195 25.0757C28.1877 25.2653 29.1533 23.3358 28.9832 21.0571C28.8227 18.9197 28.0212 16.9455 27.1318 15.0021C27.1222 14.9816 27.1105 14.9575 27.1024 14.9377C25.1733 10.7295 23.2675 6.51616 21.3464 2.28453H25.4116C25.468 2.41409 25.5252 2.55463 25.5817 2.70469C27.1882 6.85654 29.2193 10.8466 31.0429 14.9179C32.0424 17.1395 32.6136 19.4819 32.6136 21.9253" fill="white"/>
         <path d="M36.7879 30.6074C36.6339 30.8175 36.4674 31.0195 36.2988 31.2171C36.2988 31.2171 36.2907 31.2215 36.2907 31.2252C33.9033 33.9672 30.2091 35.5344 25.4349 35.4092C18.1926 35.2233 14.3782 38.0671 11.5779 44.1865H7.41895C8.81506 41.0192 10.3241 38.1447 12.4395 35.6032C14.511 33.1196 17.1573 31.8518 20.443 31.9528C22.1419 32.0011 23.8504 32.0091 25.5493 31.9528C32.3986 31.7259 36.3355 26.9687 35.5384 20.1831C34.9635 15.2598 32.5937 11.034 30.688 6.6245C30.061 5.17077 29.4004 3.72875 28.7368 2.28673H32.9478C33.0454 2.50486 33.1421 2.73837 33.2397 2.9931C35.1689 8.06212 38.0901 12.7322 39.0617 18.1958C39.9511 23.196 39.1057 27.5374 36.7879 30.6067" fill="white"/>
         <path d="M51.9998 44.1836H47.7513C47.5005 43.7715 47.2864 43.2957 47.0877 42.7577C45.7209 39.8495 42.4477 31.9945 41.21 29.0783C41.9953 27.1107 42.3876 24.8649 42.3619 22.4186C45.3484 29.0988 49.2567 38.1125 51.9998 44.1836" fill="white"/>
@@ -259,45 +131,28 @@ body::before{
   <div class="track"><div class="fill" id="fill" style="width:20%"></div></div>
 </div>
 
-<!-- ══ STEP 1 ══ -->
+<!-- STEP 1 -->
 <div class="screen on" id="s1">
-  <div class="hero-card">
-    <div class="hero-img"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <div class="hero-locs">
-        <span class="hero-loc">Accra</span>
-        <span class="hero-loc">Cape Coast</span>
-        <span class="hero-loc">Volta</span>
-        <span class="hero-loc">Kumasi</span>
-        <span class="hero-loc">Mole</span>
-      </div>
-      <div class="hero-hl">Your AI-powered<br>Ghana journey starts here</div>
-    </div>
-    <div class="hero-photo-credit">Photo: Ato Aikins / Unsplash</div>
-  </div>
-
   <div class="hero-badge"><span>✈️ AI Trip Planner</span></div>
   <h1 class="title">Let's build your Ghana trip</h1>
-  <p class="sub">Answer 5 quick questions and our AI crafts a personalised itinerary from our curated Ghana database.</p>
-
+  <p class="sub">Tell us who you are and we'll craft a personalised itinerary just for you.</p>
   <div class="qlabel">What's your first name?</div>
-  <input class="txt-in" id="inp-name" type="text" placeholder="Enter your name" autocomplete="given-name" oninput="v1()">
-
+  <input class="txt-in" id="inp-name" type="text" placeholder="First name" autocomplete="given-name" oninput="v1()" style="margin-bottom:10px">
+  <div class="qlabel" style="margin-top:0">Your email address</div>
+  <input class="txt-in" id="inp-email" type="email" placeholder="you@example.com" autocomplete="email" oninput="v1()">
   <div class="bnav">
     <button class="bnxt" id="b1" onclick="go(2)" disabled>
-      Let's go
+      Continue
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </button>
   </div>
 </div>
 
-<!-- ══ STEP 2 ══ -->
+<!-- STEP 2 -->
 <div class="screen" id="s2">
   <div class="tag">Step 2 of 5</div>
   <h1 class="title">When & how long?</h1>
-  <p class="sub">Pick your travel month and trip length.</p>
-
+  <p class="sub">Pick your travel month and how many days you have.</p>
   <div class="qlabel">Which month are you traveling?</div>
   <div class="month-grid">
     <div class="mcell" data-val="January" onclick="pickMonth(this)">Jan</div>
@@ -314,7 +169,6 @@ body::before{
     <div class="mcell" data-val="December" onclick="pickMonth(this)">Dec</div>
     <div class="mcell" data-val="Flexible" onclick="pickMonth(this)" style="grid-column:1/-1">🗓️ I'm flexible</div>
   </div>
-
   <div class="divider"></div>
   <div class="qlabel">How many days?</div>
   <div class="opts">
@@ -344,7 +198,6 @@ body::before{
       <div class="radio"></div>
     </div>
   </div>
-
   <div class="bnav">
     <button class="bbk" onclick="go(1)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
     <button class="bnxt" id="b2" onclick="go(3)" disabled>
@@ -354,7 +207,7 @@ body::before{
   </div>
 </div>
 
-<!-- ══ STEP 3 ══ -->
+<!-- STEP 3 -->
 <div class="screen" id="s3">
   <div class="tag">Step 3 of 5</div>
   <h1 class="title">Who's joining you?</h1>
@@ -395,7 +248,7 @@ body::before{
   </div>
 </div>
 
-<!-- ══ STEP 4 ══ -->
+<!-- STEP 4 -->
 <div class="screen" id="s4">
   <div class="tag">Step 4 of 5</div>
   <h1 class="title">Where in Ghana?</h1>
@@ -404,37 +257,37 @@ body::before{
   <div class="opts">
     <div class="opt" data-q="regions" data-val="Greater Accra" onclick="tog(this)">
       <span class="oicon">🏙️</span>
-      <div style="flex:1"><div class="olabel">Greater Accra</div><div class="osub">Accra city · beaches · Ada Foah</div></div>
+      <div style="flex:1"><div class="olabel">Greater Accra</div><div class="osub">Accra city, beaches, Ada Foah</div></div>
       <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>
     <div class="opt" data-q="regions" data-val="Central" onclick="tog(this)">
       <span class="oicon">🏰</span>
-      <div style="flex:1"><div class="olabel">Central Region</div><div class="osub">Cape Coast · Elmina · Kakum</div></div>
+      <div style="flex:1"><div class="olabel">Central Region</div><div class="osub">Cape Coast, Elmina, Kakum</div></div>
       <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>
     <div class="opt" data-q="regions" data-val="Volta" onclick="tog(this)">
       <span class="oicon">🏔️</span>
-      <div style="flex:1"><div class="olabel">Volta Region</div><div class="osub">Waterfalls · mountains · lake</div></div>
+      <div style="flex:1"><div class="olabel">Volta Region</div><div class="osub">Waterfalls, mountains, lake</div></div>
       <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>
     <div class="opt" data-q="regions" data-val="Ashanti" onclick="tog(this)">
       <span class="oicon">👑</span>
-      <div style="flex:1"><div class="olabel">Ashanti Region</div><div class="osub">Kumasi · kente · royal culture</div></div>
+      <div style="flex:1"><div class="olabel">Ashanti Region</div><div class="osub">Kumasi, kente, royal culture</div></div>
       <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>
     <div class="opt" data-q="regions" data-val="Eastern" onclick="tog(this)">
       <span class="oicon">🌊</span>
-      <div style="flex:1"><div class="olabel">Eastern Region</div><div class="osub">Akosombo dam · Aburi gardens</div></div>
+      <div style="flex:1"><div class="olabel">Eastern Region</div><div class="osub">Akosombo dam, Aburi gardens</div></div>
       <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>
     <div class="opt" data-q="regions" data-val="Western" onclick="tog(this)">
       <span class="oicon">🌴</span>
-      <div style="flex:1"><div class="olabel">Western Region</div><div class="osub">Rainforest · Busua beach · surf</div></div>
+      <div style="flex:1"><div class="olabel">Western Region</div><div class="osub">Rainforest, Busua beach, surf</div></div>
       <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>
     <div class="opt" data-q="regions" data-val="Savannah" onclick="tog(this)">
       <span class="oicon">🦒</span>
-      <div style="flex:1"><div class="olabel">Savannah / North</div><div class="osub">Mole Safari · Tamale · Larabanga</div></div>
+      <div style="flex:1"><div class="olabel">Savannah / North</div><div class="osub">Mole Safari, Tamale, Larabanga</div></div>
       <div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>
   </div>
@@ -447,31 +300,29 @@ body::before{
   </div>
 </div>
 
-<!-- ══ STEP 5 ══ -->
+<!-- STEP 5 -->
 <div class="screen" id="s5">
   <div class="tag">Step 5 of 5 · Last one!</div>
   <h1 class="title">Your style & vibe</h1>
   <p class="sub">Tell us how you travel and what lights you up.</p>
-
   <div class="qlabel">Travel style</div>
   <div class="opts">
     <div class="opt" data-q="style" data-val="grounded" onclick="pick(this)">
       <span class="oicon">🌿</span>
-      <div style="flex:1"><div class="olabel">Grounded & Genuine</div><div class="osub">Local immersion · $50–$150/day</div></div>
+      <div style="flex:1"><div class="olabel">Grounded & Genuine</div><div class="osub">4★ stays · meals · curated experiences · from $250/day</div></div>
       <div class="radio"></div>
     </div>
     <div class="opt" data-q="style" data-val="comfort" onclick="pick(this)">
       <span class="oicon">✨</span>
-      <div style="flex:1"><div class="olabel">Comfort & Culture</div><div class="osub">Curated mid-range · $150–$350/day</div></div>
+      <div style="flex:1"><div class="olabel">Comfort & Culture</div><div class="osub">4★ boutique · private transport · elevated · from $350/day</div></div>
       <div class="radio"></div>
     </div>
     <div class="opt" data-q="style" data-val="soft-life" onclick="pick(this)">
       <span class="oicon">🥂</span>
-      <div style="flex:1"><div class="olabel">Soft Life & Premium</div><div class="osub">All-inclusive luxury · $400+/day</div></div>
+      <div style="flex:1"><div class="olabel">Soft Life & Premium</div><div class="osub">Premium stays · private driver · concierge · from $450/day</div></div>
       <div class="radio"></div>
     </div>
   </div>
-
   <div class="divider"></div>
   <div class="qlabel">What's your vibe?</div>
   <div class="multi-hint">Select all that apply</div>
@@ -483,29 +334,43 @@ body::before{
     <div class="opt" data-q="vibe" data-val="wellness" onclick="tog(this)"><span class="oicon">🧘</span><span class="olabel">Wellness & Spa</span><div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
     <div class="opt" data-q="vibe" data-val="festivals" onclick="tog(this)"><span class="oicon">🎊</span><span class="olabel">Festivals & Events</span><div class="chk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div></div>
   </div>
-
   <div class="divider"></div>
-  <div class="qlabel">Open to connecting with other travelers? <span style="color:var(--gold);font-size:10px;font-weight:700;margin-left:5px;letter-spacing:.07em;border:1px solid rgba(200,150,62,.3);padding:2px 7px;border-radius:10px">AKWAABA 2.0</span></div>
+  <div class="qlabel">Open to connecting with other travelers? <span style="color:var(--gold);font-size:11px;font-weight:600;margin-left:4px;letter-spacing:.05em">AKWAABA 2.0</span></div>
   <div class="opts">
     <div class="opt" data-q="pairing" data-val="solo-only" onclick="pick(this)"><span class="oicon">🧳</span><span class="olabel">Solo only — keep my trip private</span><div class="radio"></div></div>
     <div class="opt" data-q="pairing" data-val="open-1-2" onclick="pick(this)"><span class="oicon">👥</span><span class="olabel">Open to 1–2 compatible travelers</span><div class="radio"></div></div>
     <div class="opt" data-q="pairing" data-val="open-group" onclick="pick(this)"><span class="oicon">🎉</span><span class="olabel">Open to small group experiences</span><div class="radio"></div></div>
   </div>
-
   <div class="bnav">
     <button class="bbk" onclick="go(4)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
     <button class="bsub" id="b5" onclick="generate()" disabled>Build My Trip ✨</button>
   </div>
 </div>
 
-<!-- ══ LOADING ══ -->
+<!-- PAYWALL MODAL -->
+<div class="pw-overlay" id="pwModal">
+  <div class="pw-card">
+    <div class="pw-pill"></div>
+    <div class="pw-icon">✈️</div>
+    <h2 class="pw-title">Your free plan has been used</h2>
+    <p class="pw-sub">Your first Ghana itinerary was on us. Generate another personalised plan for just $4.99.</p>
+    <div class="pw-price">
+      <span class="pw-amount">$4.99</span>
+      <span class="pw-per">per plan</span>
+    </div>
+    <button class="pw-btn" onclick="payAndGenerate()">Unlock My Plan →</button>
+    <button class="pw-skip" onclick="closePw()">Maybe later</button>
+  </div>
+</div>
+
+<!-- LOADING -->
 <div id="loading">
   <div class="spin-wrap">
     <div class="spin-ring"></div>
     <div class="spin-icon">🇬🇭</div>
   </div>
   <h2 class="load-title">Building your trip…</h2>
-  <p class="load-sub">Our AI is crafting your personalised Ghana itinerary from our curated database</p>
+  <p class="load-sub">Our AI is crafting your personalised Ghana itinerary</p>
   <div class="load-steps">
     <div class="lstep active" id="ls1"><span class="lstep-icon">🏨</span> Curating your accommodations</div>
     <div class="lstep" id="ls2"><span class="lstep-icon">🗺️</span> Mapping your route</div>
@@ -563,7 +428,9 @@ function pickMonth(el){
 }
 
 function v1(){
-  document.getElementById('b1').disabled=!document.getElementById('inp-name').value.trim();
+  const n=document.getElementById('inp-name').value.trim();
+  const e=document.getElementById('inp-email').value.trim();
+  document.getElementById('b1').disabled=!(n&&e&&e.includes('@'));
 }
 
 function revalidate(){
@@ -573,7 +440,34 @@ function revalidate(){
   document.getElementById('b5').disabled=!(A.style&&M.vibe.size>0&&A.pairing);
 }
 
+const PW_KEY='akw_plans_used';
+
+function checkPaywall(){
+  const used=parseInt(localStorage.getItem(PW_KEY)||'0');
+  if(used>=1){
+    document.getElementById('pwModal').classList.add('on');
+    return true;
+  }
+  return false;
+}
+
+function closePw(){
+  document.getElementById('pwModal').classList.remove('on');
+}
+
+function payAndGenerate(){
+  // Placeholder: in production this would open Stripe checkout
+  // For now, mark as paid and proceed
+  closePw();
+  doGenerate();
+}
+
 async function generate(){
+  if(checkPaywall())return;
+  doGenerate();
+}
+
+async function doGenerate(){
   document.getElementById('s5').classList.remove('on');
   document.getElementById('pbar').style.display='none';
   const loading=document.getElementById('loading');
@@ -588,6 +482,7 @@ async function generate(){
   },1200);
 
   const name=document.getElementById('inp-name').value.trim();
+  const email=document.getElementById('inp-email').value.trim();
 
   try{
     const res=await fetch('/api/generate',{
@@ -595,6 +490,7 @@ async function generate(){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         name,
+        email,
         days:parseInt(A.days)||7,
         dates:A.month+' 2026',
         group:A.group,
@@ -610,6 +506,10 @@ async function generate(){
 
     if(!res.ok)throw new Error('API error '+res.status);
     const data=await res.json();
+
+    // Mark one plan used
+    const used=parseInt(localStorage.getItem(PW_KEY)||'0');
+    localStorage.setItem(PW_KEY,String(used+1));
 
     setTimeout(()=>{window.location.href=data.redirectUrl;},600);
 
